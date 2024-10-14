@@ -45,14 +45,14 @@ pipeline {
             steps {
                 bat 'terraform apply -var-file=envs/dev/terraform.tfvars --auto-approve'
             }
-        }
+        }}
 
         post{
             always{
-                emailext{
+                emailext(
                     subject:"Pipeline Status: ${BUILD_NUMBER}",
                     body:"Build Status:${BUILD_STATUS}"
-                }
+                )
                 to:'klintonece@gmail.com',
                 from:'klintonaws@gmail.com',
                 replyTo:'klintonece@gmail.com',
@@ -60,4 +60,4 @@ pipeline {
             }
         }
     }
-}
+
