@@ -18,7 +18,7 @@ resource "genesyscloud_routing_queue" "Test_Form_Queue" {
   skill_evaluation_method  = "BEST"
   enable_audio_monitoring  = false
   enable_transcription     = false
-  description              = "Test Queue for Terraform latest"
+  description              = "Test Queue for Terraform latest  e"
   enable_manual_assignment = false
   media_settings_callback {
     enable_auto_answer        = false
