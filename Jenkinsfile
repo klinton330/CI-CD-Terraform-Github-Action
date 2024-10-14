@@ -68,19 +68,5 @@ pipeline {
                 bat 'terraform destroy -var-file=envs/dev/terraform.tfvars --auto-approve'
             }
         }}
-
-        post{
-            always{
-                emailext(
-                    subject:"Pipeline Status:",
-                    body:"Build Status:",
-                
-                to:'klintonece@gmail.com',
-                from:'klintonaws@gmail.com',
-                replyTo:'klintonece@gmail.com',
-                mimeType:'text/html'
-                )
-            }
-        }
     }
 
