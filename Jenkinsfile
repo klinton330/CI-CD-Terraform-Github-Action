@@ -1,7 +1,7 @@
 pipeline {
 
     parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan and destroy?')
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
     } 
     environment {
         GC_ACCESS_KEY_ID ="bec9621c-5bc7-400b-87a5-59c6e8bb2eac"
@@ -54,11 +54,7 @@ stage('Destroy Approval') {
             }
 
             steps {
-                script {
-                    def plan = readFile 'tfplan.txt'
-                    input message: "Do you want to apply the plan?",
-                    parameters: [text(name: 'Destroy', description: 'you need to destroy the created resource?', defaultValue: destroy)]
-                }
+                 input(message: 'Are you sure you want to destroy the environment?')
             }
         }
 
