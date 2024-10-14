@@ -29,6 +29,6 @@ resource "genesyscloud_architect_datatable" "Test_Terraform" {
     type    = "boolean"
     default = "false"
   }
-  description = "Datatable for Terraform 1"
+  description = "Datatable for Terraform latest"
 }
 
