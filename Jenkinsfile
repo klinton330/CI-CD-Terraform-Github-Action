@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/klinton330/Terraform-with-modules.git'
+                git branch: 'main', url: 'https://github.com/klinton330/CI-CD-Terraform.git'
             }
         }
 
