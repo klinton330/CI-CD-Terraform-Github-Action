@@ -45,7 +45,7 @@ pipeline {
             steps {
                 bat 'terraform apply -var-file=envs/dev/terraform.tfvars --auto-approve'
             }
-        }}
+        }
 
         stage('D Approval') {
             when {
