@@ -50,8 +50,8 @@ pipeline {
         post{
             always{
                 emailext(
-                    subject:"Pipeline Status: ${BUILD_NUMBER}",
-                    body:"Build Status:${BUILD_STATUS}",
+                    subject:"Pipeline Status:",
+                    body:"Build Status:",
                 
                 to:'klintonece@gmail.com',
                 from:'klintonaws@gmail.com',
