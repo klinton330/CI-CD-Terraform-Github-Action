@@ -11,7 +11,7 @@ pipeline {
     agent any
 
     stages {
-        stage('checkout') {
+        stage('Checkout from GIT') {
             steps {
                 git branch: 'main', url: 'https://github.com/klinton330/Terraform-with-modules.git'
             }
