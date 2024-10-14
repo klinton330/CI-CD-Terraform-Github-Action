@@ -47,26 +47,12 @@ pipeline {
             }
         }
 
-        stage('D Approval') {
-            when {
-                not {
-                    equals expected: true, actual: params.autoApprove
-                }
-            }
-
-            steps {
-                script {
-                    def plan = readFile 'tfplan.txt'
-                    input message: "Do you want to destroy the changes?",
-                    parameters: [text(name: 'Destroy', description: 'Please review Destroy', defaultValue: destroy)]
-                }
-            }
-        }
 
         stage('Destroy') {
             steps {
                 bat 'terraform destroy -var-file=envs/dev/terraform.tfvars --auto-approve'
             }
-        }}
+        }
+      }
     }
 
