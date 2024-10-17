@@ -13,6 +13,11 @@ inboundCall:
           voice: Danielle-NTTS
   initialGreeting:
     tts: Hello Japan.
+  variables:
+    - stringVariable:
+        name: Flow.env
+        initialValue:
+          noValue: true
   settingsActionDefaults:
     playAudioOnSilence:
       timeout:
@@ -122,6 +127,13 @@ inboundCall:
               name: Play Audio
               audio:
                 exp: AudioPlaybackOptions(ToAudio(Prompt.TestTerraformPrompt), true)
+          - updateData:
+              name: Update Data
+              statements:
+                - string:
+                    variable: Flow.env
+                    value:
+                      lit: DEV
           - jumpToTask:
               name: Jump to Reusable Task
               targetTaskRef: "/inboundCall/tasks/task[Transfer to Queue_16]"
@@ -205,5 +217,293 @@ inboundCall:
                       noValue: true
                     errorMessage:
                       noValue: true
+              outputs:
+                found:
+                  actions:
+                    - switch:
+                        name: Switch
+                        evaluate:
+                          firstTrue:
+                            default:
+                              actions:
+                                - callTask:
+                                    name: Call Task
+                                    targetTaskRef: "/inboundCall/tasks/task[DR Dataaction_38]"
+                            cases:
+                              - case:
+                                  value:
+                                    exp: Flow.env=="DEV"
+                                  actions:
+                                    - callTask:
+                                        name: Call Task
+                                        targetTaskRef: "/inboundCall/tasks/task[Stage Dataaction_23]"
+                              - case:
+                                  value:
+                                    exp: Flow.env=="PROD"
+                                  actions:
+                                    - callTask:
+                                        name: Call Task
+                                        targetTaskRef: "/inboundCall/tasks/task[Prod Dataaction_30]"
+                              - case:
+                                  value:
+                                    exp: Flow.env=="DR"
+                                  actions:
+                                    - callTask:
+                                        name: Call Task
+                                        targetTaskRef: "/inboundCall/tasks/task[DR Dataaction_38]"
+                notFound:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: RESULT
+                              value:
+                                lit: Datatable lookup not found
+                failure:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: RESULT
+                              value:
+                                lit: Datatable lookup failure
           - disconnect:
               name: Disconnect
+    - task:
+        name: Stage Dataaction
+        refId: Stage Dataaction_23
+        variables:
+          - stringVariable:
+              name: Task.Result
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE1
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE2
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - callData:
+              name: Call Data Action
+              processingPrompt:
+                noValueWithNoFallback: true
+              category:
+                Web Services Data Actions Stage:
+                  dataAction:
+                    TestTerraform-DA-Stage:
+                      inputs:
+                        CURRENCYFLAG:
+                          exp: "\"1\""
+                        DATEFLAG:
+                          exp: "\"2\""
+                      successOutputs:
+                        RESULT:
+                          var: Task.Result
+                        TTSRATE1:
+                          var: Task.TTSRATE1
+                        TTSRATE2:
+                          var: Task.TTSRATE2
+              outputs:
+                success:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Success
+                failure:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Failure
+                timeout:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Timeout
+          - endTask:
+              name: End Task
+              outputPath:
+                name: default
+    - task:
+        name: Prod Dataaction
+        refId: Prod Dataaction_30
+        variables:
+          - stringVariable:
+              name: Task.Result
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE1
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE2
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - callData:
+              name: Call Data Action
+              processingPrompt:
+                noValueWithNoFallback: true
+              category:
+                Web Services Data Actions Prod:
+                  dataAction:
+                    TestTerraform-DA-Prod:
+                      inputs:
+                        CURRENCYFLAG:
+                          exp: "\"1\""
+                        DATEFLAG:
+                          exp: "\"2\""
+                      successOutputs:
+                        RESULT:
+                          var: Task.Result
+                        TTSRATE1:
+                          var: Task.TTSRATE1
+                        TTSRATE2:
+                          var: Task.TTSRATE2
+              outputs:
+                success:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Success
+                failure:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Failure
+                timeout:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Timeout
+          - endTask:
+              name: End Task
+              outputPath:
+                name: default
+    - task:
+        name: DR Dataaction
+        refId: DR Dataaction_38
+        variables:
+          - stringVariable:
+              name: Task.Result
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE1
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.TTSRATE2
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - callData:
+              name: Call Data Action
+              processingPrompt:
+                noValueWithNoFallback: true
+              category:
+                Web Services Data Actions DR:
+                  dataAction:
+                    TestTerraform-DA - DR:
+                      inputs:
+                        CURRENCYFLAG:
+                          exp: "\"1\""
+                        DATEFLAG:
+                          exp: "\"2\""
+                      successOutputs:
+                        RESULT:
+                          var: Task.Result
+                        TTSRATE1:
+                          var: Task.TTSRATE1
+                        TTSRATE2:
+                          var: Task.TTSRATE2
+              outputs:
+                success:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Success
+                failure:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Failure
+                timeout:
+                  actions:
+                    - setParticipantData:
+                        name: Set Participant Data
+                        attributes:
+                          - attribute:
+                              name:
+                                lit: Result
+                              value:
+                                lit: Data action Timeout
+          - endTask:
+              name: End Task
+              outputPath:
+                name: default
