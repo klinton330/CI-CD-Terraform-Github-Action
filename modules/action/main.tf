@@ -13,14 +13,14 @@ resource "genesyscloud_integration_action" "TestTerraform-DA-Stage" {
   
   config_request {
     headers = {
-      Authorization = "Basic '${var.dev_stage_Authorization}'"
+      Authorization = "Basic '${var.stage_Authorization}'"
     }
     request_template     = "$${input.rawRequest}"
     request_type         = "POST"
-    request_url_template = "https://apicallinfra-stg.pgf-life.co.jp/pgf/v1/cc/d013"
+    request_url_template = var.stage_D013_dataaction_URL
   }
   
-  integration_id  = var.dev_stage_intid
+  integration_id  = var.stage_intid
   
   contract_input  = jsonencode({
     "additionalProperties": true,
@@ -66,14 +66,14 @@ resource "genesyscloud_integration_action" "TestTerraform-DA-Prod" {
   
   config_request {
     headers = {
-      Authorization = "Basic '${var.dev_prod_Authorization}'"
+      Authorization = "Basic '${var.prod_Authorization}'"
     }
     request_template     = "$${input.rawRequest}"
     request_type         = "POST"
-    request_url_template = "https://apicallinfra-prd.pgf-life.co.jp/pgf/v1/cc/d013"
+    request_url_template = var.prod_D013_dataaction_URL
   }
   
-  integration_id  = var.dev_prod_intid
+  integration_id  = var.prod_intid
   
   contract_input  = jsonencode({
     "additionalProperties": true,
@@ -119,14 +119,14 @@ resource "genesyscloud_integration_action" "TestTerraform-DA-DR" {
   
   config_request {
     headers = {
-      Authorization = "Basic '${var.dev_dr_Authorization}'"
+      Authorization = "Basic '${var.dr_Authorization}'"
     }
     request_template     = "$${input.rawRequest}"
     request_type         = "POST"
-    request_url_template = "https://apicallinfra-dr.pgf-life.co.jp/pgf/v1/cc/d013"
+    request_url_template = var.dr_D013_dataaction_URL
   }
   
-  integration_id  = var.dev_dr_intid
+  integration_id  = var.dr_intid
   
   contract_input  = jsonencode({
     "additionalProperties": true,

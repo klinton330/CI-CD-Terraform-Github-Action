@@ -1,47 +1,52 @@
-variable "dev_stage_intid"{
+variable "stage_intid"{
    type= string 
     description= "Integration ID for webservices"
     default=""
 }
 
-variable "dev_stage_Authorization"{
+variable "stage_Authorization"{
    type= string 
     description= "Authorization key "
     default=""
 }
 
-variable "dev_prod_intid"{
+variable "prod_intid"{
    type= string 
     description= "Integration ID for webservices"
     default=""
 }
 
-variable "dev_prod_Authorization"{
+variable "prod_Authorization"{
    type= string 
     description= "Authorization key "
     default=""
 }
-variable "dev_dr_intid"{
+variable "dr_intid"{
    type= string 
     description= "Integration ID for webservices"
     default=""
 }
 
-variable "dev_dr_Authorization"{
+variable "dr_Authorization"{
    type= string 
     description= "Authorization key "
     default=""
 }
 
-
-variable "west_stage_Authorization"{
-     type= string 
-    description= "Authorization key "
-    default=""
-}
-
-variable "west_stage_intid"{
+variable "stage_D013_dataaction_URL"{
    type= string 
-    description= "Integration ID for webservices"
+    description= "Stage DA URL"
     default=""
 }
+
+variable "prod_D013_dataaction_URL"{
+   type= string 
+    description= "Prod DA URL "
+    default=""
+}
+variable "dr_D013_dataaction_URL"{
+   type= string 
+    description= "DR DA URL"
+    default=""
+}
+

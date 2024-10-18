@@ -26,14 +26,17 @@ source=".//modules//userprompt"
 
 module "action"{
   source=".//modules//action"
-  dev_stage_intid=var.dev_stage_intid
-  dev_stage_Authorization=var.dev_stage_Authorization
-  west_stage_Authorization=var.west_stage_Authorization
-  west_stage_intid=var.west_stage_intid
-  dev_prod_intid=var.dev_prod_intid
-  dev_prod_Authorization=var.dev_prod_Authorization
-  dev_dr_intid=var.dev_dr_intid
-  dev_dr_Authorization=var.dev_dr_Authorization
+  stage_intid=var.stage_intid
+  prod_intid=var.prod_intid
+  dr_intid=var.dr_intid
+
+  stage_Authorization=var.stage_Authorization
+  prod_Authorization=var.prod_Authorization
+  dr_Authorization=var.dr_Authorization
+
+  stage_D013_dataaction_URL=var.stage_D013_dataaction_URL
+  prod_D013_dataaction_URL=var.prod_D013_dataaction_URL
+  dr_D013_dataaction_URL=var.dr_D013_dataaction_URL
 }
 
 resource "genesyscloud_flow" "INBOUNDCALL_TestTerraform" {
