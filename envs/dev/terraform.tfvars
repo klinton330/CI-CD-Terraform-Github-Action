@@ -20,3 +20,13 @@ prod_D013_dataaction_URL="https://dev-apicallinfra-prd.pgf-life.co.jp/pgf/v1/cc/
 dr_intid="d2a21869-5ad1-46dc-ab41-bfa0f2e3e1f2"
 dr_Authorization="b2xKbzZTNFVHYTBZNDQ2MmtWR2NZRlJFUmlSbjR5Q0I6NVF5T3V4RmE4ZmlabHp2Mw=="
 dr_D013_dataaction_URL="https://dev-apicallinfra-dr.pgf-life.co.jp/pgf/v1/cc/d013"
+
+
+#Exporting flow
+flowName= "TestTerraform"
+flowType="inboundcall"
+outputDir="./Export_Dest/inboundcall"
+exportFileName="pointel"
+ex_oauthclient_id = "2703fbe7-5357-479c-b678-08186dca2989"
+ex_oauthclient_secret = "yr3Q5b9Cmkd5qe_la2M87KsfDNgQlOjuYDNKoZvk8jk"
+location="usw2.pure.cloud"

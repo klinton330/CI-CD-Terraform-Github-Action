@@ -39,8 +39,19 @@ module "action"{
   dr_D013_dataaction_URL=var.dr_D013_dataaction_URL
 }
 
+module "export"{
+  source=".//modules//export"
+  flowName= var.flowName
+  flowType=var.flowType
+  outputDir=var.outputDir
+  exportFileName=var.exportFileName
+  ex_oauthclient_id= var.ex_oauthclient_id
+  ex_oauthclient_secret=var.ex_oauthclient_secret
+  location=var.location
+
+}
 resource "genesyscloud_flow" "INBOUNDCALL_TestTerraform" {
-  depends_on        = [module.datatable, module.Queues,module.userprompt,module.action]
+  depends_on        = [module.datatable, module.Queues,module.userprompt,module.action,module.export]
   file_content_hash = "${filesha256(var.inboundcallflow_dir)}"
   filepath          = "${var.inboundcallflow_dir}"
 }
