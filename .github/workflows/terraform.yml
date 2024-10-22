@@ -1,0 +1,72 @@
+name: CI/CD Terraform
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  GC_ACCESS_KEY_ID: ${{ secrets.GC_ACCESS_KEY_ID }}
+  GC_SECRET_ACCESS_KEY: ${{ secrets.GC_SECRET_ACCESS_KEY }}
+  GC_REGION: ap-northeast-1
+
+jobs:
+  terraform:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: |
+          terraform plan -var-file=envs/dev/terraform.tfvars -out=tfplan
+          terraform show -no-color tfplan > tfplan.txt
+
+      - name: Review and Approve Plan
+        if: ${{ inputs.autoApprove == 'false' }}
+        run: |
+          echo "Do you want to apply the plan?"
+          cat tfplan.txt
+        # GitHub UI Manual Review Required here
+        continue-on-error: true  # This is to simulate input functionality
+
+      - name: Terraform Apply
+        run: terraform apply -var-file=envs/dev/terraform.tfvars --auto-approve
+        if: ${{ inputs.autoApprove == 'true' }} # Apply without manual review if autoApprove
+
+  destroy:
+    runs-on: windows-latest
+    needs: terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Destroy Approval
+        if: ${{ inputs.autoApprove == 'false' }}
+        run: |
+          echo "Are you sure you want to destroy the environment?"
+        # GitHub UI Manual Review Required here
+        continue-on-error: true  # This is to simulate input functionality
+
+      - name: Terraform Destroy
+        run: terraform destroy -var-file=envs/dev/terraform.tfvars --auto-approve
